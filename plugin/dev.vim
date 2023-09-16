@@ -12,4 +12,4 @@ endfunction
 nnoremap <Leader>era :call ReloadAlpha()<CR>
 
 " Test the plugin
-nnoremap <Leader>eta :lua require("powernuts").sayHelloWorld()<CR>
+nnoremap <Leader>eta :lua require("powernuts").sayNuts()<CR>

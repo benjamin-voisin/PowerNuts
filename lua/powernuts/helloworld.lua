@@ -1,5 +1,5 @@
 local M = {}
 
-function M.sayHelloWorld() print('Hello woprotu!! again !') end
+function M.sayNuts() print('I like Nuts !') end
 
 return M
