@@ -1,3 +1,10 @@
-local hello = require('powernuts.helloworld')
+local powernuts = {}
 
-return hello
+
+
+
+function powernuts.sayNuts() print('I like Nuts !') end
+
+function powernuts.sayPath() print(powernuts.path or 'No Path to the squirrel prover specified') end
+
+return powernuts
