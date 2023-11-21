@@ -42,7 +42,7 @@ function powernuts.sayNuts()
     -- squirrel:toggle()
     -- print(vim.api.nvim_buf_get_name(vim.api.nvim_list_wins()[1]))
 
-    vim.api.nvim_buf_set_text(get_buf("info0"), 0, 0, 0, 0, get_ascii("assets/squirrels.txt"))
+    -- vim.api.nvim_buf_set_text(get_buf("info0"), 0, 0, 0, 0, get_ascii("assets/squirrels.txt"))
 
 end
 
