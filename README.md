@@ -7,27 +7,28 @@ A neovim plugin allowing users to use the full power of the Squirrel proof assis
 
 ## Installation
 
-The plugin currently needs the ToggleTerm plugin to work.
+There are no dependencies needed.
 
 ### Using Lazy.nvim
 
 ```lua
 {
-    'benjamin-voisin/PowerNuts',
-    dependencies = {akinsho/toggleterm.nvim},
+    'benjamin-voisin/PowerNuts'
 }
 ```
 
-## Configuration
+<!-- ## Configuration -->
 
-You need to give the path to your compiled `squirrel prover` by placing the
-line
-```lua
-require('powernuts').path = 'YourPathToSquirrel'
-```
+<!-- You need to give the path to your compiled `squirrel prover` by placing the -->
+<!-- line -->
+<!-- ```lua -->
+<!-- require('powernuts').path = 'YourPathToSquirrel' -->
+<!-- ``` -->
 
 ## Usage
 
-Currently one function : `:Nuts`, which will pass the whole current file to the
-squirrel prover by oppening a floating window and displaying the output of
-squirrel.
+The only working functionnality now is the syntax highlingting.
+
+<!-- Currently one function : `:Nuts`, which will pass the whole current file to the -->
+<!-- squirrel prover by oppening a floating window and displaying the output of -->
+<!-- squirrel. -->
