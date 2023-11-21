@@ -14,22 +14,26 @@ syntax keyword squirrelKeywords
             \ euf
             \ set
             \ include
+            \ system
 
 syntax keyword squirrelConstants
             \ ok
             \ ko
 
-syntax keyword squirrelFunctions
+syntax keyword squirrelStruct
             \ process
             \ lemma
-            \ fst
-            \ snd
+
+syntax match squirrelFunctions "\v(\w[a-zA-Z0-9_']*)\ze\(.*\)"
+
 
 syntax keyword squirrelOperator
             \ diff
             \ new
             \ out
             \ in
+            \ ->
+            \ *
             \ =>
             \ <=>
 
@@ -47,10 +51,11 @@ syntax keyword squirrelAdmit admit Admitted
 
 syntax region squirrelComments start="(\*" end="\*)"
 
+hi def link squirrelFunctions   Identifier
 hi def link squirrelKeywords    Keyword
 hi def link squirrelAdmit       Error
 hi def link squirrelConstants   Constant
-hi def link squirrelFunctions   Function
+hi def link squirrelStruct      Function
 hi def link squirrelCond        Conditional
 hi def link squirrelType        Type
 hi def link squirrelOperator    Operator
