@@ -1,4 +1,5 @@
 local powernuts = {}
+-- local system = require("vim").system
 
 -- vim.cmd(":autocmd BufEnter * if tabpagenr('$') == 2 && winnr('$') == 2 && exists('b:info0') && exists('b:goal0') | quit | endif")
 
@@ -39,7 +40,7 @@ function powernuts.sayNuts()
     local command =  powernuts.path..' '..vim.fn.expand('%')
     local squirrel = Terminal:new({ cmd = command, close_on_exit=false, direction="float"})
     vim.cmd(":set splitright | vnew info0 |  new goal0 | winc h")
-    -- squirrel:toggle()
+    system({'squirrel', '--help'}, {text = true})
     -- print(vim.api.nvim_buf_get_name(vim.api.nvim_list_wins()[1]))
 
     -- vim.api.nvim_buf_set_text(get_buf("info0"), 0, 0, 0, 0, get_ascii("assets/squirrels.txt"))

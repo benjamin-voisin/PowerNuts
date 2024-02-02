@@ -1,12 +1,9 @@
-syntax keyword squirrelKeywords
-            \ abstract
-            \ name
-            \ channel
+syntax keyword squirrelTactics
             \ Proof
             \ Qed
             \ intro
             \ exists
-            \ foral
+            \ forall
             \ induction
             \ auto
             \ expand 
@@ -14,7 +11,18 @@ syntax keyword squirrelKeywords
             \ euf
             \ set
             \ include
+            \ project
+            \ split
+            \ repeat
+            \ fresh
+            \ depends
+
+syntax keyword squirrelKeywords
+            \ abstract
+            \ name
+            \ channel
             \ system
+            \ equiv
 
 syntax keyword squirrelConstants
             \ ok
@@ -23,6 +31,7 @@ syntax keyword squirrelConstants
 syntax keyword squirrelStruct
             \ process
             \ lemma
+            \ axiom
 
 syntax match squirrelFunctions "\v(\w[a-zA-Z0-9_']*)\ze\(.*\)"
 
@@ -49,10 +58,11 @@ syntax keyword squirrelType
 
 syntax keyword squirrelAdmit admit Admitted
 
-syntax region squirrelComments start="(\*" end="\*)"
+syntax region squirrelComments start="(\*\**" end="\*)"
 
 hi def link squirrelFunctions   Identifier
 hi def link squirrelKeywords    Keyword
+hi def link squirrelTactics     Keyword
 hi def link squirrelAdmit       Error
 hi def link squirrelConstants   Constant
 hi def link squirrelStruct      Function
