@@ -1,8 +1,0 @@
-{
-    "workspace.library": [
-        "/home/binj/.local/share/nvim/lazy/neodev.nvim/types/stable",
-        "/usr/share/nvim/runtime/lua",
-        "/home/binj/Documents/Projets/PowerNuts/lua",
-        "${3rd}/luv/library"
-    ]
-}
