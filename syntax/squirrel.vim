@@ -58,7 +58,7 @@ syntax keyword squirrelType
 
 syntax keyword squirrelAdmit admit Admitted
 
-syntax region squirrelComments start="(\*\**" end="\*)"
+syntax region squirrelComments start="(\*" end="\*)"
 
 hi def link squirrelFunctions   Identifier
 hi def link squirrelKeywords    Keyword
