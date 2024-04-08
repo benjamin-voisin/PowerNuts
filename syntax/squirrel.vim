@@ -1,21 +1,80 @@
 syntax keyword squirrelTactics
-            \ Proof
-            \ Qed
-            \ intro
-            \ exists
-            \ forall
-            \ induction
-            \ auto
-            \ expand 
-            \ rewrite
-            \ euf
-            \ set
-            \ include
-            \ project
-            \ split
-            \ repeat
-            \ fresh
-            \ depends
+			\ anyintro
+			\ use
+			\ namelength
+			\ with
+			\ assert
+			\ trans
+			\ sym
+			\ have
+			\ case
+			\ const
+			\ adv
+			\ collision
+			\ depends
+			\ eqnames
+			\ eqtraces
+			\ euf
+			\ executable
+			\ exists
+			\ Exists
+			\ splitseq
+			\ remember
+			\ expand
+			\ fresh
+			\ forall
+			\ Forall
+			\ help
+			\ id
+			\ clear
+			\ prof
+			\ induction
+			\ intro
+			\ apply
+			\ crypto
+			\ generalize
+			\ dependent
+			\ revert
+			\ destruct
+			\ as
+			\ left
+			\ notleft
+			\ print
+			\ search
+			\ project
+			\ right
+			\ simpl
+			\ reduce
+			\ simpl_left
+			\ split
+			\ subst
+			\ rewrite
+			\ true
+			\ cca1
+			\ ddh
+			\ gdh
+			\ cdh
+			\ enckp
+			\ enrich
+			\ equivalent
+			\ expandall
+			\ fa
+			\ show
+			\ deduce
+			\ fresh
+			\ prf
+			\ trivialif
+			\ xor
+			\ intctxt
+			\ splitseq
+			\ constseq
+			\ localize
+			\ memseq
+			\ byequiv
+			\ diffeq
+			\ gcca
+			\ rename
+			\ gprf
 
 syntax keyword squirrelKeywords
             \ abstract
@@ -52,11 +111,15 @@ syntax keyword squirrelCond
             \ else
 
 syntax keyword squirrelType
-            \ message
-            \ index
-            \ hash
+			\ index
+			\ message
+			\ boolean
+			\ bool
+			\ timestamp
+			\ large
+			\ name_fixed_length
 
-syntax keyword squirrelAdmit admit Admitted
+syntax keyword squirrelAdmit admit Admitted Abort
 
 syntax region squirrelComments start="(\*" end="\*)"
 
