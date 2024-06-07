@@ -11,3 +11,5 @@ command PrintSquirrelOutput call powernuts#PrintSquirrelOutput()
 command! -nargs=1 SendInputToSquirrel call powernuts#SendInputToSquirrel(<f-args>)
 command SquirrelNext call powernuts#NextDotWithoutComment()
 nnoremap <leader>sn :SquirrelNext<CR>
+command SquirrelGoTo call powernuts#GoTo()
+nnoremap <leader>sg :SquirrelGoTo<CR>

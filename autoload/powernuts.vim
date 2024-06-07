@@ -102,13 +102,42 @@ endfunction
 
 function! powernuts#Previous()
 	if (s:squirrel_index > 0)
+		call Update_dot_table()
 		call powernuts#SendInputToSquirrel('undo 1')
 		let s:squirrel_index = s:squirrel_index - 1
+		" remove highlighting of undone text
 	endif
 endfunction
 
 function! powernuts#GoTo()
+	call Update_dot_table()
 	" find the first entry in s:dot_table that is before the goto
+	let old_pos = getpos('.')
+	let old_pos = [old_pos[1], old_pos[2]]
+	let best_fit = [0,0]
+	" k is the new value for s:squirrel_index
+	let k = 0
+	for position in s:dot_table
+		if (position[0] < old_pos[0])
+			let best_fit = position
+		elseif (position[0] == old_pos[0] && position[1] <= old_pos[1])
+			let best_fit = position
+		else
+			break
+		endif
+		let k += 1
+	endfor
+	if (best_fit[1] > old_pos[1] || (best_fit[1] == old_pos[1] && best_fit[0] > old_pos[0]))
+		" If we need to go after where we are
+		" We need to iterate over each "dot" like doing many SquirrelNext
+		while (s:squirrel_index < k - 1) 
+			call powernuts#NextDotWithoutComment()
+		endwhile
+		call powernuts#PrintSquirrelOutput()
+	else
+		echom "nrsatienldpaéc"
+		" Else, we need to go back
+	endif
 	"
 	" undo the correct number
 endfunction
@@ -120,6 +149,7 @@ function! powernuts#NextDotWithoutComment()
 	call powernuts#ClearSquirrelOutput()
 	let s:answered = 0
 	call powernuts#SendInputToSquirrel(text)
+	" Never stops when we send an abstract ? : ?. input... need to be fixed
 	while s:answered == 0
 		sleep 100m
 	endwhile
