@@ -9,3 +9,5 @@ command Nuts call powernuts#Nuts()
 command UnNut call powernuts#UnNut()
 command PrintSquirrelOutput call powernuts#PrintSquirrelOutput()
 command! -nargs=1 SendInputToSquirrel call powernuts#SendInputToSquirrel(<f-args>)
+command SquirrelNext call powernuts#NextDotWithoutComment()
+nnoremap <leader>sn :SquirrelNext<CR>
