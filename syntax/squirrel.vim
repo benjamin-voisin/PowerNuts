@@ -133,3 +133,16 @@ hi def link squirrelCond        Conditional
 hi def link squirrelType        Type
 hi def link squirrelOperator    Operator
 hi def link squirrelComments    Comment
+
+
+if &t_Co > 16
+  if &background ==# 'dark'
+    hi def PowerNutsChecked ctermbg=17 guibg=#113311
+  else
+    hi def PowerNutsChecked ctermbg=17 guibg=LightGreen
+  endif
+else
+  hi def PowerNutsChecked ctermbg=4 guibg=LightGreen
+endif
+hi def link PowerNutsError Error
+hi def link PowerNutsOmitted squirrelAdmit
