@@ -117,7 +117,6 @@ function! powernuts#NextDotWithoutComment()
 	call Update_dot_table()
 	let text = GetTextBetweenPositions( s:dot_table[s:squirrel_index][0], s:dot_table[s:squirrel_index][1] + 1, s:dot_table[s:squirrel_index + 1][0], s:dot_table[s:squirrel_index + 1][1])
 	let s:squirrel_index = s:squirrel_index + 1
-	" echom text
 	call powernuts#ClearSquirrelOutput()
 	let s:answered = 0
 	call powernuts#SendInputToSquirrel(text)
@@ -125,46 +124,5 @@ function! powernuts#NextDotWithoutComment()
 		sleep 100m
 	endwhile
 	call powernuts#PrintSquirrelOutput()
-	" let save_cursor = getpos('.')
-	" call setpos(".", [0, g:squirrel_line, g:squirrel_collumn - 1, 0])
-	" let [dot_line, dot_col] = searchpos('\.', 'W')
-	" call setpos('.', save_cursor)
-
-	" Check if dot is inside a comment
-	" while getline(dot_line) =~# '\(\*\*\|\*\)\s*\.' || getline(dot_line-1) =~# '\(\*\*\|\*\)\s*\.$'
-	"   let [dot_line, dot_col] = searchpos('\.', 'W')
-	" endwhile
-
-	" let current_line = line('.')
-	" let current_col = col('.')
-
-	" let current_line = g:squirrel_line
-	" let current_col = g:squirrel_collumn
-
-	" let end = search("\.")
-	" let lines = getline(current_line, end)
-	" echo lines
-	" let g:squirrel_line = dot_line
-	" let g:squirrel_collumn = dot_col
-
-
-	" Ensure the dot is after the current position
-	" if (current_line > dot_line) || (current_line == dot_line && current_col <= dot_col)
-	" let text_between = strpart(getline(current_line), current_col-1)
-	" for line_num in range(current_line+1, dot_line-1)
-	" let text_between .= getline(line_num)
-	" endfor
-	" let text_between .= strpart(getline(dot_line), 0, dot_col-1)
-
-	" call setpos('.', save_cursor)
-	" echo text_between
-	" return text_between
-	" else
-	" echomsg "No text found between the current position and the next dot."
-	" call setpos('.', save_cursor)
-	" return ''
-	" endif
-	" let text_between = getline(current_line)
-	" return text_between
 
 endfunction
