@@ -13,3 +13,5 @@ command SquirrelNext call powernuts#NextDotWithoutComment()
 nnoremap <leader>sn :SquirrelNext<CR>
 command SquirrelGoTo call powernuts#GoTo()
 nnoremap <leader>sg :SquirrelGoTo<CR>
+command SquirrelPrevious call powernuts#Previous()
+nnoremap <leader>sp :SquirrelPrevious<CR>

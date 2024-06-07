@@ -1,4 +1,5 @@
 let s:dot_table = []
+let s:checked_groups = [[]]
 let s:squirrel_index = 0
 let s:answered = 0
 
@@ -38,27 +39,32 @@ endfunction
 function! GetTextBetweenPositions(startLine, startCol, stopLine, stopCol)
     " Get lines between start and stop lines
     let lines = getline(a:startLine, a:stopLine)
+	let s:checked_groups += [[]]
 
     " If start and stop lines are the same, get the substring between columns
     if a:startLine == a:stopLine
         let lineText = lines[0][a:startCol-1 : a:stopCol-1]
-		call matchaddpos('PowerNutsChecked',[a:startLine, a:startCol, a:stopCol - a:startCol])
+		let m = matchaddpos('PowerNutsChecked',[a:startLine, a:startCol, a:stopCol - a:startCol])
+		let s:checked_groups[-1] += [m]
     else
         " Remove text before the starting column in the first line
         let lines[0] = lines[0][a:startCol-1:]
 		" Highlight the first line
 		let line_width = strdisplaywidth(getline(a:startLine))
-		call matchaddpos('PowerNutsChecked',[[a:startLine, a:startCol, line_width - a:startCol]])
+		let m = matchaddpos('PowerNutsChecked',[[a:startLine, a:startCol, line_width - a:startCol]])
+		let s:checked_groups[-1] += [m]
 
         " Remove text after the stopping column in the last line
         let lines[-1] = lines[-1][:a:stopCol-1]
 		" Highilght the last line
-		call matchaddpos('PowerNutsChecked',[[a:stopLine, 0, a:stopCol]])
+		let m = matchaddpos('PowerNutsChecked',[[a:stopLine, 0, a:stopCol]])
+		let s:checked_groups[-1] += [m]
         let lineText = join(lines, "\n")
 		" Highlight lines in between
 		let i = a:startLine + 1
 		while i < a:stopLine
-			call matchaddpos('PowerNutsChecked',[i])
+			let m = matchaddpos('PowerNutsChecked',[i])
+			let s:checked_groups[-1] += [m]
 			let i = i + 1
 		endwhile
     endif
@@ -76,8 +82,12 @@ function! powernuts#Nuts()
 	let cmd = "./squirrel -i"
 	let options = {'out_cb': 'HandleSquirrelOutput', 'close_cb': 'HandleSquirrelOutput'}
 
-	let g:squirrel_job = job_start(cmd, options)
-	let g:squirrel_channel = job_getchannel(g:squirrel_job)
+	if has('nvim')
+		echom "Not yet implemented for nvim"
+	else
+		let g:squirrel_job = job_start(cmd, options)
+		let g:squirrel_channel = job_getchannel(g:squirrel_job)
+	endif
 endfunction
 
 function! powernuts#SendInputToSquirrel(input)
@@ -103,9 +113,13 @@ endfunction
 function! powernuts#Previous()
 	if (s:squirrel_index > 0)
 		call Update_dot_table()
-		call powernuts#SendInputToSquirrel('undo 1')
+		call powernuts#SendInputToSquirrel('undo 1.')
 		let s:squirrel_index = s:squirrel_index - 1
 		" remove highlighting of undone text
+		for id in s:checked_groups[-1]
+			call matchdelete(id)
+		endfor
+		let s:checked_groups = s:checked_groups[0:-2]
 	endif
 endfunction
 
