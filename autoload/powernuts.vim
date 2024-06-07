@@ -1,5 +1,6 @@
 let s:dot_table = []
 let s:squirrel_index = 0
+let s:answered = 0
 
 " We might want to make a smarter version of this that updates only text after
 " the last modification, so that it doesn't have to parse the hole file each
@@ -67,6 +68,7 @@ endfunction
 
 function! HandleSquirrelOutput(channel, msg)
 	let g:squirrel_output += split(substitute(a:msg, '\e\[[0-9;]\+[mK]', '', 'g'), '\n')
+	let s:answered = 1
 endfunction
 
 function! powernuts#Nuts()
@@ -116,10 +118,12 @@ function! powernuts#NextDotWithoutComment()
 	let text = GetTextBetweenPositions( s:dot_table[s:squirrel_index][0], s:dot_table[s:squirrel_index][1] + 1, s:dot_table[s:squirrel_index + 1][0], s:dot_table[s:squirrel_index + 1][1])
 	let s:squirrel_index = s:squirrel_index + 1
 	" echom text
-	echom job_status(g:squirrel_job)
 	call powernuts#ClearSquirrelOutput()
+	let s:answered = 0
 	call powernuts#SendInputToSquirrel(text)
-	echom job_status(g:squirrel_job)
+	while s:answered == 0
+		sleep 100m
+	endwhile
 	call powernuts#PrintSquirrelOutput()
 	" let save_cursor = getpos('.')
 	" call setpos(".", [0, g:squirrel_line, g:squirrel_collumn - 1, 0])
