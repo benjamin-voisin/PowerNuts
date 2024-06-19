@@ -2,6 +2,11 @@ let s:dot_table = []
 let s:checked_groups = [[]]
 let s:squirrel_index = 0
 let s:answered = 0
+let s:answer_type = "info"
+
+fu! StartsWith(longer, shorter) abort
+  return a:longer[0:len(a:shorter)-1] ==# a:shorter
+endfunction
 
 " We might want to make a smarter version of this that updates only text after
 " the last modification, so that it doesn't have to parse the hole file each
@@ -79,7 +84,7 @@ endfunction
 
 function! powernuts#Nuts()
 	set splitright | vnew info0 |  new goal0 | winc h
-	let cmd = "./squirrel -i"
+	let cmd = "squirrel -i"
 	let options = {'out_cb': 'HandleSquirrelOutput', 'close_cb': 'HandleSquirrelOutput'}
 
 	if has('nvim')
@@ -88,20 +93,52 @@ function! powernuts#Nuts()
 		let g:squirrel_job = job_start(cmd, options)
 		let g:squirrel_channel = job_getchannel(g:squirrel_job)
 	endif
+	sleep 100m
+	call powernuts#PrintSquirrelOutput()
 endfunction
 
 function! powernuts#SendInputToSquirrel(input)
 	call ch_sendraw(g:squirrel_channel, a:input . "\n")
 endfunction
 
-function! powernuts#ClearSquirrelOutput()
+function! powernuts#ClearSquirrelGoal()
+	let output_buffer = winbufnr(bufwinid('goal0'))
+	call deletebufline(output_buffer, 1, '$')
+endfunction
+
+function! powernuts#ClearSquirrelInfo()
 	let output_buffer = winbufnr(bufwinid('info0'))
 	call deletebufline(output_buffer, 1, '$')
 endfunction
 
 function! powernuts#PrintSquirrelOutput()
-	let output_buffer = winbufnr(bufwinid('info0'))
-	call setbufline(output_buffer, 1, g:squirrel_output)
+	let goal_buffer = winbufnr(bufwinid('goal0'))
+	let info_buffer = winbufnr(bufwinid('info0'))
+	let goal_line = 1
+	let info_line = 1
+	for line in g:squirrel_output 
+		if ((StartsWith(line, "[>  [goal>")) || (StartsWith(line, "[>  Goal")))
+			let s:answer_type = "goal"
+			call powernuts#ClearSquirrelGoal()
+		elseif (stridx(line, "[>  [error>") >= 0)
+			let s:answer_type = "error"
+			call powernuts#ClearSquirrelInfo()
+			call RemoveLastColor()
+		elseif (stridx(line, "[>") >= 0)
+			let s:answer_type = "info"
+			call powernuts#ClearSquirrelInfo()
+		endif
+		if s:answer_type == "goal"
+			call setbufline(goal_buffer, goal_line, line)
+			let goal_line += 1
+		elseif s:answer_type == "info"
+			call setbufline(info_buffer, info_line, line)
+			let info_line += 1
+		elseif s:answer_type == "error"
+			call setbufline(info_buffer, info_line, line)
+			let info_line += 1
+		endif
+	endfor
 	let g:squirrel_output = []
 endfunction
 
@@ -110,16 +147,20 @@ function! powernuts#UnNut()
 	bdelete goal0
 endfunction
 
+function! RemoveLastColor()
+	let s:squirrel_index = s:squirrel_index - 1
+	" remove highlighting of undone text
+	for id in s:checked_groups[-1]
+		call matchdelete(id)
+	endfor
+	let s:checked_groups = s:checked_groups[0:-2]
+endfunction
+
 function! powernuts#Previous()
 	if (s:squirrel_index > 0)
 		call Update_dot_table()
 		call powernuts#SendInputToSquirrel('undo 1.')
-		let s:squirrel_index = s:squirrel_index - 1
-		" remove highlighting of undone text
-		for id in s:checked_groups[-1]
-			call matchdelete(id)
-		endfor
-		let s:checked_groups = s:checked_groups[0:-2]
+		call RemoveLastColor()
 	endif
 endfunction
 
@@ -160,13 +201,19 @@ function! powernuts#NextDotWithoutComment()
 	call Update_dot_table()
 	let text = GetTextBetweenPositions( s:dot_table[s:squirrel_index][0], s:dot_table[s:squirrel_index][1] + 1, s:dot_table[s:squirrel_index + 1][0], s:dot_table[s:squirrel_index + 1][1])
 	let s:squirrel_index = s:squirrel_index + 1
-	call powernuts#ClearSquirrelOutput()
 	let s:answered = 0
 	call powernuts#SendInputToSquirrel(text)
 	" Never stops when we send an abstract ? : ?. input... need to be fixed
-	while s:answered == 0
+	" Also for "set"
+	" if (StartsWith(text, "set") || StartsWith(text, "abstract"))
+	if ((stridx(text, "set") >= 0) || (stridx(text, "abstract") >= 0) || (stridx(text, "channel") >= 0) || (stridx(text, "senc") >= 0) || (stridx(text, "aenc") >= 0) || (stridx(text, "mutable") >= 0))
 		sleep 100m
-	endwhile
-	call powernuts#PrintSquirrelOutput()
+		call powernuts#PrintSquirrelOutput()
+	else
+		while s:answered == 0
+			sleep 100m
+		endwhile
+		call powernuts#PrintSquirrelOutput()
+	endif
 
 endfunction
