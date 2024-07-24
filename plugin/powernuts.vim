@@ -5,6 +5,8 @@ let g:squirrel_job = -1
 let g:squirrel_channel = -1
 let g:squirrel_output = []
 
+autocmd FileType squirrel setlocal commentstring=(*\ %s\ *)
+
 command Nuts call powernuts#Nuts()
 command UnNut call powernuts#UnNut()
 command PrintSquirrelOutput call powernuts#PrintSquirrelOutput()
